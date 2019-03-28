@@ -1,0 +1,5 @@
+name: NoAttack
+author: ConnorChickenway
+version: 0.1
+softdepend: [ASkyBlock]
+main: mx.connorchickenway.noattack.Main
