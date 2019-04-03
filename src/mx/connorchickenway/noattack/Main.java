@@ -5,13 +5,16 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 
@@ -32,20 +35,29 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	
-	@EventHandler(priority=EventPriority.MONITOR)
+	@EventHandler(priority=EventPriority.HIGH)
 	public void onDamage(EntityDamageByEntityEvent event) {
 		if(event.isCancelled()) {
 			return;
 		}
+		
 		Entity entity = event.getEntity();
 		Entity damager = event.getDamager();
-		if(!(entity instanceof Player && damager instanceof Player)) {
-			return;
+		
+		if(damager instanceof Projectile) {
+			ProjectileSource ps = ((Projectile) damager).getShooter();
+			if (ps instanceof Entity) {
+                damager = (Entity) ps;
+            }
 		}
-		List<UUID> list = api.getTeamMembers(damager.getUniqueId());
-		if(list.contains(entity.getUniqueId())) {
-			event.setCancelled(true);
+		
+		if(entity instanceof Player && damager instanceof Player) {
+			List<UUID> list = api.getTeamMembers(damager.getUniqueId());
+			if(list.contains(entity.getUniqueId())) {
+				event.setCancelled(true);
+			}
 		}
+
 	}
 
 }
