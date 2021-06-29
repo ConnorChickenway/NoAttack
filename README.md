@@ -1,2 +1,2 @@
 # NoAttack
-Simple plugin for servers that want to put koth or some other pvp event on skyblock 
+a simple plugin for servers that want a koth or any other pvp event on skyblock. 
